@@ -3,23 +3,24 @@ const {
   getPostById,
   addPost,
   deletePost,
-  updatePost
+  updatePost,
+  addComment
 } = require('../utils/posts_utilities');
 
 const getPosts = function (req, res) {
   getAllPosts(req).
   sort({
-        modified_date: -1
-    }).
-    exec((err, posts) => {
-        if (err) {
-            res.status(500);
-            return res.json({
-                error: err.message
-            });
-        }
-        res.send(posts);
-    });
+    modified_date: -1
+  }).
+  exec((err, posts) => {
+    if (err) {
+      res.status(500);
+      return res.json({
+        error: err.message
+      });
+    }
+    res.send(posts);
+  });
 };
 
 const getPost = function (req, res) {
@@ -75,10 +76,24 @@ const changePost = function (req, res) {
   });
 };
 
+const makeComment = (req, res) => {
+  addComment(req).then((post) => {
+    console.log(post.commentors())
+    res.status(200);
+    res.send(post);
+  }).catch((err) => {
+    res.status(500);
+    res.json({
+      error: err.message
+    });
+  });
+}
+
 module.exports = {
   getPosts,
   getPost,
   makePost,
   removePost,
-  changePost
+  changePost,
+  makeComment
 };

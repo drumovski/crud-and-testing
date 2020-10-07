@@ -23,7 +23,18 @@ const Post = new Schema({
         type: String,
         required: true
     },
-    category: String
+    category: String,
+    comments: [{
+        username: String,
+        comment: String       
+    }]
 });
+
+//methods
+Post.methods.commentors = function (){
+    // console.log(this.comments)
+    return this.comments.map((com) => com.username)
+}
+
 
 module.exports = mongoose.model('Post', Post);

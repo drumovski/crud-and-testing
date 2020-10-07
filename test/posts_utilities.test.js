@@ -70,7 +70,7 @@ function tearDownData() {
 
 
 
-describe.only('1. getAllPosts with one post', () => {
+describe('1. getAllPosts with one post', () => {
     it('should get a post if one exists', async function () {
         let req = {
             query: {}
@@ -90,7 +90,7 @@ describe.only('1. getAllPosts with one post', () => {
     });
 });
 
-describe.only('2.getPostById', () => {
+describe('2.getPostById', () => {
     it('username of first post should be tester', async function () {
         // Set up req with postId
         let req = {
@@ -105,7 +105,7 @@ describe.only('2.getPostById', () => {
 });
 
 // addPost
-describe.only('3.addPost', () => {
+describe('3.addPost', () => {
     it('should add a post', async function () {
         // define a req object with expected structure
         const req = {
@@ -123,7 +123,7 @@ describe.only('3.addPost', () => {
 });
 
 // deletePost
-describe.only('4.deletePost', () => {
+describe('4.deletePost', () => {
     it('should delete the specified post', async function () {
         await utilities.deletePost(postId).exec();
         await Post.findById(postId).exec((err, post) => {
@@ -152,6 +152,28 @@ describe('5.updatePost', () => {
         });
     });
 });
+
+// create Comment
+describe('6.create a comment', () => {
+    it('should create a comment', async function () {
+        // set up a req object
+        const req = {
+            params: {
+                postId: postId
+            },
+            body: {
+                    comment: "test comment",
+                    username: "test username"
+                    }
+            
+        };
+        await utilities.addComment(req).then((post) => {
+            expect(post.comments.length).toBe(1);
+            expect(post.comments[0].comment).toBe("test comment");
+        });
+    });
+});
+
 
 // describe('getAllPosts with one post', () => {
 //     it('should get a post if one exists', () => {

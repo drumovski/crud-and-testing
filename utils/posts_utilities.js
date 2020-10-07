@@ -40,6 +40,17 @@ const updatePost = function (req) {
   });
 };
 
+const addComment = async (req) => {
+  let postId = req.params.postId;
+  let post =  await Post.findById(postId);
+  let comment = {
+    username: req.body.username,
+    comment: req.body.comment
+  }
+  post.comments.push(comment)
+  return Post.findByIdAndUpdate(postId, post, {new: true});
+}
+
 // Local helper functions
 
 function filter(queryParams) {
@@ -59,5 +70,6 @@ module.exports = {
   getPostById,
   addPost,
   deletePost,
-  updatePost
+  updatePost,
+  addComment
 }
