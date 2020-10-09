@@ -44,6 +44,7 @@ beforeEach(async function () {
     // Use await so we can access the postId, which is used by some tests
     let post = await setupData()
     postId = post._id
+    commentId = post.comments[0]._id
 })
 
 function setupData() {
@@ -55,6 +56,10 @@ function setupData() {
     testPost.modified_date = date
     testPost.content = "This is the first test post"
     testPost.category = ""
+    testPost.comments = [{
+        username: "commentor",
+        comment: "Commentors test comment"
+    }]
     return Post.create(testPost)
 }
 
@@ -168,13 +173,47 @@ describe('6.create a comment', () => {
             
         };
         await utilities.addComment(req).then((post) => {
-            expect(post.comments.length).toBe(1);
-            expect(post.comments[0].comment).toBe("test comment");
+            expect(post.comments.length).toBe(2);
+            expect(post.comments[1].comment).toBe("test comment");
         });
     });
 });
 
+describe('7.update a comment', () => {
+    it('should update a comment', async function () {
+        // set up a req object
+        const req = {
+            params: {
+                postId: postId,
+                commentId: commentId
+            },
+            body: {
+                    comment: "updated test comment",
+                    username: "updated test username"
+                    }
+            
+        };
+        await utilities.updateComment(req).then((post) => {
+            expect(post.comments.length).toBe(1);
+            expect(post.comments[0].comment).toBe("updated test comment");
+        });
+    });
+});
 
+describe('8.delete a comment', () => {
+    it('should delete a comment', async function () {
+        // set up a req object
+        const req = {
+            params: {
+                postId: postId,
+                commentId: commentId
+            }           
+        };
+        await utilities.deleteComment(req).then((post) => {
+            expect(post.comments.length).toBe(0);
+        });
+    });
+});
 // describe('getAllPosts with one post', () => {
 //     it('should get a post if one exists', () => {
 //         expect(Object.keys(utilities.getAllPosts({
@@ -266,5 +305,4 @@ describe('6.create a comment', () => {
 
 // function tearDownData() {
 //     let testPostData = {};
-//     fs.writeFileSync(testDataFileForWrite, JSON.stringify(testPostData));
-// }
+//     fs.writeFileSync(testDataFileForWrite, JSON.stringify(testPostDat

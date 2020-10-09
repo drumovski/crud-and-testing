@@ -51,6 +51,55 @@ const addComment = async (req) => {
   return Post.findByIdAndUpdate(postId, post, {new: true});
 }
 
+const updateComment = async (req) => {
+  let commentId = req.params.commentId;
+  let postId = req.params.postId;
+  let post =  await Post.findById(postId);
+  // Article.find( {author.id: req.params.id} )
+  // console.log("inside update Comment")
+  // console.log(typeof(post.comments[0]._id))
+  // console.log(typeof(commentId))
+  // console.log("original ", post.comments[0]._id)
+  // console.log("in params", commentId)
+  let index = post.comments.findIndex((com) => {
+    // console.log (String(com._id) == String(commentId))
+    return String(com._id) == String(commentId);
+  })
+  // console.log(index)
+  // console.log(post.comments)
+  post.comments[index] = {
+    username: req.body.username,
+    comment: req.body.comment
+  };
+  console.log(post.comments)
+  return Post.findByIdAndUpdate(postId, post, {new: true});
+}
+
+
+const deleteComment = async (req) => {
+  let commentId = req.params.commentId;
+  let postId = req.params.postId;
+  let post =  await Post.findById(postId);
+  // Article.find( {author.id: req.params.id} )
+  // console.log("inside update Comment")
+  // console.log(typeof(post.comments[0]._id))
+  // console.log(typeof(commentId))
+  // console.log("original ", post.comments[0]._id)
+  // console.log("in params", commentId)
+  let index = post.comments.findIndex((com) => {
+    // console.log (String(com._id) == String(commentId))
+    return String(com._id) == String(commentId);
+  })
+  // console.log(index)
+  // console.log(post.comments)
+  post.comments = post.comments.filter((com) => {
+    return String(com._id) != String(commentId);
+  });
+  console.log(post.comments)
+  return Post.findByIdAndUpdate(postId, post, {new: true});
+}
+
+
 // Local helper functions
 
 function filter(queryParams) {
@@ -71,5 +120,7 @@ module.exports = {
   addPost,
   deletePost,
   updatePost,
-  addComment
+  addComment,
+  updateComment,
+  deleteComment
 }

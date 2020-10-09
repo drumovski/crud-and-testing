@@ -6,7 +6,9 @@ const {
   makePost,
   removePost,
   changePost,
-  makeComment
+  makeComment,
+  changeComment,
+  removeComment
 } = require('../controllers/posts_controller');
 
 // READ
@@ -36,5 +38,11 @@ router.put('/:id', changePost);
 
 //CREATE COMMENT
 router.post('/:postId/comments', makeComment);
+
+//UPDATE COMMENT
+router.put('/:postId/comments/:commentId', changeComment);
+
+//DELETE COMMENT
+router.delete('/:postId/comments/:commentId', removeComment);
 
 module.exports = router;

@@ -4,7 +4,9 @@ const {
   addPost,
   deletePost,
   updatePost,
-  addComment
+  addComment,
+  updateComment,
+  deleteComment
 } = require('../utils/posts_utilities');
 
 const getPosts = function (req, res) {
@@ -78,7 +80,33 @@ const changePost = function (req, res) {
 
 const makeComment = (req, res) => {
   addComment(req).then((post) => {
-    console.log(post.commentors())
+    // console.log(post.commentors())
+    res.status(200);
+    res.send(post);
+  }).catch((err) => {
+    res.status(500);
+    res.json({
+      error: err.message
+    });
+  });
+}
+
+const changeComment = (req, res) => {
+  updateComment(req).then((post) => {
+    // console.log(post.commentors())
+    res.status(200);
+    res.send(post);
+  }).catch((err) => {
+    res.status(500);
+    res.json({
+      error: err.message
+    });
+  });
+}
+
+const removeComment = (req, res) => {
+  deleteComment(req).then((post) => {
+    // console.log(post.commentors())
     res.status(200);
     res.send(post);
   }).catch((err) => {
@@ -95,5 +123,7 @@ module.exports = {
   makePost,
   removePost,
   changePost,
-  makeComment
+  makeComment,
+  changeComment,
+  removeComment
 };
